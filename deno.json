@@ -1,0 +1,16 @@
+{
+  "name": "@baiq/translator",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "license": "MIT",
+  "imports": {
+    "@langchain/core": "npm:@langchain/core@^0.3.58",
+    "@langchain/openai": "npm:@langchain/openai@^0.5.13"
+  },
+  "tasks": {
+    "test": "deno test --allow-read --allow-net --allow-env --allow-write --allow-run",
+    "lint": "deno lint --unstable",
+    "fmt": "deno fmt",
+    "check": "deno fmt && deno check"
+  }
+}
