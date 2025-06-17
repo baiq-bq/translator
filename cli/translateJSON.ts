@@ -8,22 +8,35 @@ import {
   translateJSON,
   translateText,
 } from "../mod.ts";
-import { GoogleModel, OpenAIModel } from "../LangChainConfig.ts";
+import type { GoogleModel, OpenAIModel } from "../LangChainConfig.ts";
+import type { ChatOpenAI, ChatOpenAICallOptions } from "@langchain/openai";
+import type { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
-const args = parseArgs(["--engine", "--model", "--lang", "--file", "--key"], {
+let translateTextImpl = translateText;
+let configureLangChainImpl = configureLangChain;
+
+if (Deno.env.get("CLI_TEST_MODE")) {
+  translateTextImpl = (text: string, lang: string) =>
+    Promise.resolve(`${text}-${lang}`);
+  configureLangChainImpl = (_cfg: LangChainConfig) =>
+    ({} as ChatOpenAI<ChatOpenAICallOptions> | ChatGoogleGenerativeAI);
+}
+
+const args = parseArgs(Deno.args, {
   string: ["engine", "model", "lang", "file", "key"],
 });
 
-if (!args.engine || !args.model || !args.lang || !args.file || !args.key) {
+if (!args.engine || !args.model || !args.lang || !args.file) {
   console.error(
-    "Usage: deno run jsr:@baiq/translator/cli/translateJSON --engine <openai|google> --model <model> --lang <lang> --file <path> --key <api-key>",
+    "Usage: deno run jsr:@baiq/translator/cli/translateJSON --engine=<openai|google> --model=<model> --lang=<lang> --file=<path-to-json-file> [--key=<api-key>]"
   );
   Deno.exit(1);
 }
 
-const apiKey = args.key ??
+const apiKey =
+  args.key ??
   Deno.env.get(
-    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY",
+    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY"
   ) ??
   "";
 
@@ -50,11 +63,9 @@ if (args.engine === "openai") {
 const fileContent = await Deno.readTextFile(args.file);
 const jsonData = JSON.parse(fileContent);
 
-const chat = configureLangChain(config);
-const result = await translateJSON(
-  jsonData,
-  args.lang,
-  (text, lang) => translateText(text, lang, chat),
+const chat = configureLangChainImpl(config);
+const result = await translateJSON(jsonData, args.lang, (text, lang) =>
+  translateTextImpl(text, lang, chat)
 );
 
 console.log(JSON.stringify(result, null, 2));

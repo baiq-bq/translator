@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-env --allow-net
 
-import { parse } from "https://deno.land/std@0.224.0/flags/mod.ts";
+import { parseArgs } from "@std/cli/parse-args";
 import {
   configureLangChain,
   type GoogleModel,
@@ -17,26 +17,25 @@ let configureLangChainImpl = configureLangChain;
 if (Deno.env.get("CLI_TEST_MODE")) {
   translateTextImpl = (text: string, lang: string) =>
     Promise.resolve(`${text}-${lang}`);
-  configureLangChainImpl = (
-    _cfg: LangChainConfig,
-  ) => ({} as ChatOpenAI<ChatOpenAICallOptions> | ChatGoogleGenerativeAI);
+  configureLangChainImpl = (_cfg: LangChainConfig) =>
+    ({} as ChatOpenAI<ChatOpenAICallOptions> | ChatGoogleGenerativeAI);
 }
 
-const args = parse(Deno.args, {
+const args = parseArgs(Deno.args, {
   string: ["engine", "model", "lang", "text", "key"],
-  alias: { e: "engine", m: "model", l: "lang", t: "text", k: "key" },
 });
 
 if (!args.engine || !args.model || !args.lang || !args.text) {
   console.error(
-    "Usage: deno run jsr:@baiq/translator/cli/translateText --engine <openai|google> --model <model> --lang <lang> --text <text> [--key <api-key>]",
+    "Usage: deno run jsr:@baiq/translator/cli/translateText --engine=<openai|google> --model=<model> --lang=<lang> --text=<text> [--key=<api-key>]"
   );
   Deno.exit(1);
 }
 
-const apiKey = args.key ??
+const apiKey =
+  args.key ??
   Deno.env.get(
-    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY",
+    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY"
   ) ??
   "";
 

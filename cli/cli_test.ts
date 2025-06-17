@@ -2,12 +2,27 @@ import assert from "node:assert/strict";
 
 async function run(args: string[], env: Record<string, string>) {
   const cmd = new Deno.Command(Deno.execPath(), {
-    args: ["run", "--allow-env", ...args],
+    args: ["run", "--allow-env", "--allow-read", "--allow-write", ...args],
     env,
     stdout: "piped",
     stderr: "piped",
   });
   const { code, stdout, stderr } = await cmd.output();
+  console.log("Exit code:", code);
+  if (code !== 0) {
+    console.error("Error output:", new TextDecoder().decode(stderr));
+    throw new Error(`Command failed with exit code ${code}`);
+  }
+  console.log("Standard output:", new TextDecoder().decode(stdout));
+  if (stderr.length > 0) {
+    console.warn("Standard error:", new TextDecoder().decode(stderr));
+  }
+  if (stdout.length === 0) {
+    console.warn("No output received from command.");
+  }
+  if (stderr.length === 0) {
+    console.warn("No error output received from command.");
+  }
   return {
     code,
     stdout: new TextDecoder().decode(stdout),
@@ -18,17 +33,12 @@ async function run(args: string[], env: Record<string, string>) {
 Deno.test("translateText CLI", async () => {
   const { code, stdout } = await run(
     [
-      "cli/translateText.ts",
-      "--engine",
-      "openai",
-      "--model",
-      "gpt-4o",
-      "--lang",
-      "fr",
-      "--text",
-      "Hello",
-      "--key",
-      "dummy",
+      "translateText.ts",
+      "--engine=openai",
+      "--model=gpt-4o",
+      "--lang=fr",
+      "--text=Hello",
+      "--key=dummy",
     ],
     { CLI_TEST_MODE: "1" }
   );
@@ -38,25 +48,27 @@ Deno.test("translateText CLI", async () => {
 
 Deno.test("translateJSON CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".json" });
-  await Deno.writeTextFile(tmp, JSON.stringify({ greeting: "Hello" }));
+  await Deno.writeTextFile(
+    tmp,
+    JSON.stringify({ greeting: "Hello", nested: { value: "World" } })
+  );
   const { code, stdout } = await run(
     [
-      "--allow-read",
-      "cli/translateJSON.ts",
-      "--engine",
-      "openai",
-      "--model",
-      "gpt-4o",
-      "--lang",
-      "fr",
-      "--file",
-      tmp,
-      "--key",
-      "dummy",
+      "translateJSON.ts",
+      "--engine=openai",
+      "--model=gpt-4o",
+      "--lang=fr",
+      "--file=" + tmp,
+      "--key=dummy",
     ],
     { CLI_TEST_MODE: "1" }
   );
+
   assert.equal(code, 0);
   const out = JSON.parse(stdout);
-  assert.deepEqual(out, { greeting: "Hello-fr" });
+  assert.deepEqual(out, {
+    greeting: "Hello-fr",
+    nested: { value: "World-fr" },
+  });
+  await Deno.remove(tmp);
 });
