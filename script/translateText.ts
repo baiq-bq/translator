@@ -9,6 +9,15 @@ import {
   translateText,
 } from "../mod.ts";
 
+let translateTextImpl = translateText;
+let configureLangChainImpl = configureLangChain;
+
+if (Deno.env.get("CLI_TEST_MODE")) {
+  translateTextImpl = (text: string, lang: string) =>
+    Promise.resolve(`${text}-${lang}`);
+  configureLangChainImpl = (_cfg: LangChainConfig) => ({} as unknown);
+}
+
 const args = parse(Deno.args, {
   string: ["engine", "model", "lang", "text", "key"],
   alias: { e: "engine", m: "model", l: "lang", t: "text", k: "key" },
@@ -46,6 +55,6 @@ if (args.engine === "openai") {
   };
 }
 
-const chat = configureLangChain(config);
-const result = await translateText(args.text, args.lang, chat);
+const chat = configureLangChainImpl(config);
+const result = await translateTextImpl(args.text, args.lang, chat);
 console.log(result);
