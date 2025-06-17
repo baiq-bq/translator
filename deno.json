@@ -5,7 +5,7 @@
     ".": "./mod.ts",
     "./json": "./json/mod.ts",
     "./text": "./text/mod.ts",
-    "./cli/translateText": "./cli/traslateText.ts",
+    "./cli/translateText": "./cli/translateText.ts",
     "./cli/translateJSON": "./cli/translateJSON.ts"
   },
   "license": "MIT",
