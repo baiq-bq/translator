@@ -5,12 +5,13 @@ import { HumanMessage } from "@langchain/core/messages";
 const translateText = async (
   text: string,
   targetLang: string,
-  chat: ChatOpenAI | ChatGoogleGenerativeAI
+  chat: ChatOpenAI | ChatGoogleGenerativeAI,
 ): Promise<string> => {
+  const prompt = `Translate the following text to ${targetLang}: ${text}. ` +
+    "Do not include any additional text or formatting. Just return the translated text. " +
+    "Text is aimed for a web application, so keep it concise and clear.";
   const response = await chat.invoke([
-    new HumanMessage(`Translate the following text to ${targetLang}: ${text}
-      Do not include any additional text or formatting. Just return the translated text.
-      Text is aimed for a web application, so keep it concise and clear.`),
+    new HumanMessage(prompt),
   ]);
   if (!response || !response.content) {
     throw new Error("Translation failed or returned empty content.");
