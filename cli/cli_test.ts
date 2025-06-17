@@ -16,19 +16,22 @@ async function run(args: string[], env: Record<string, string>) {
 }
 
 Deno.test("translateText CLI", async () => {
-  const { code, stdout } = await run([
-    "script/translateText.ts",
-    "--engine",
-    "openai",
-    "--model",
-    "gpt-4o",
-    "--lang",
-    "fr",
-    "--text",
-    "Hello",
-    "--key",
-    "dummy",
-  ], { CLI_TEST_MODE: "1" });
+  const { code, stdout } = await run(
+    [
+      "cli/translateText.ts",
+      "--engine",
+      "openai",
+      "--model",
+      "gpt-4o",
+      "--lang",
+      "fr",
+      "--text",
+      "Hello",
+      "--key",
+      "dummy",
+    ],
+    { CLI_TEST_MODE: "1" }
+  );
   assert.equal(code, 0);
   assert.equal(stdout.trim(), "Hello-fr");
 });
@@ -36,20 +39,23 @@ Deno.test("translateText CLI", async () => {
 Deno.test("translateJSON CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".json" });
   await Deno.writeTextFile(tmp, JSON.stringify({ greeting: "Hello" }));
-  const { code, stdout } = await run([
-    "--allow-read",
-    "script/translateJSON.ts",
-    "--engine",
-    "openai",
-    "--model",
-    "gpt-4o",
-    "--lang",
-    "fr",
-    "--file",
-    tmp,
-    "--key",
-    "dummy",
-  ], { CLI_TEST_MODE: "1" });
+  const { code, stdout } = await run(
+    [
+      "--allow-read",
+      "cli/translateJSON.ts",
+      "--engine",
+      "openai",
+      "--model",
+      "gpt-4o",
+      "--lang",
+      "fr",
+      "--file",
+      tmp,
+      "--key",
+      "dummy",
+    ],
+    { CLI_TEST_MODE: "1" }
+  );
   assert.equal(code, 0);
   const out = JSON.parse(stdout);
   assert.deepEqual(out, { greeting: "Hello-fr" });
