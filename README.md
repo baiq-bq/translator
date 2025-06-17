@@ -1,7 +1,7 @@
 # translator
 
-Utilities for translating plain text or the values of JSON objects using
-LangChain chat models.
+Utilities for translating plain text, JSON, or XML content using LangChain chat
+models.
 
 ## Usage
 
@@ -34,6 +34,19 @@ console.log(translated);
 // { greeting: "Bonjour", nested: { bye: "Au revoir" } }
 ```
 
+### XML translation
+
+```ts
+const xml = `<page><paragraph><line>Hello</line></paragraph></page>`;
+const translatedXml = await translateXML(
+  xml,
+  "fr",
+  (text, lang) => translateText(text, lang, chat),
+  "paragraph",
+);
+console.log(translatedXml);
+```
+
 ### CLI usage
 
 Translate a short text directly from the command line:
@@ -54,6 +67,17 @@ deno run jsr:@baiq/translator/cli/translateJSON \
   --model=gemini-1.5-flash \
   --lang=fr \
   --file=data.json
+```
+
+You can also translate an XML file:
+
+```sh
+deno run jsr:@baiq/translator/cli/translateXML \
+  --engine=openai \
+  --model=gpt-4o \
+  --lang=fr \
+  --file=page.xml \
+  --stopTag=paragraph
 ```
 
 Both commands also accept an `--key` flag for providing the API key explicitly.

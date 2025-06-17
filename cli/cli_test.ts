@@ -72,3 +72,25 @@ Deno.test("translateJSON CLI", async () => {
   });
   await Deno.remove(tmp);
 });
+
+Deno.test("translateXML CLI", async () => {
+  const tmp = await Deno.makeTempFile({ suffix: ".xml" });
+  await Deno.writeTextFile(
+    tmp,
+    "<root><a>Hello</a><b>World</b></root>",
+  );
+  const { code, stdout } = await run(
+    [
+      "translateXML.ts",
+      "--engine=openai",
+      "--model=gpt-4o",
+      "--lang=fr",
+      "--file=" + tmp,
+      "--key=dummy",
+    ],
+    { CLI_TEST_MODE: "1" },
+  );
+  assert.equal(code, 0);
+  assert.equal(stdout.trim(), "<root><a>Hello-fr</a><b>World-fr</b></root>");
+  await Deno.remove(tmp);
+});

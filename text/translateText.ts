@@ -25,7 +25,7 @@ import { HumanMessage } from "@langchain/core/messages";
 const translateText = async (
   text: string,
   targetLang: string,
-  chat: ChatOpenAI | ChatGoogleGenerativeAI
+  chat: ChatOpenAI | ChatGoogleGenerativeAI,
 ): Promise<string> => {
   const prompt = [
     `You are a professional translator.`,
