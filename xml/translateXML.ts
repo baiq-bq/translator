@@ -1,5 +1,4 @@
-/// <reference lib="dom" />
-import { DOMParser } from "linkedom";
+import { DOMParser } from "deno-dom";
 
 /**
  * Recursively translate the text content of an XML string.

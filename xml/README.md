@@ -1,7 +1,7 @@
 # `xml` module
 
 Helpers for translating XML strings using the
-[`linkedom`](https://www.npmjs.com/package/linkedom) DOM implementation.
+[`deno-dom`](https://jsr.io/@b-fuze/deno-dom) DOM implementation.
 
 Nested tags are handled recursively. When the specified `stopTag` is
 encountered, its contents are sent as a single block for translation.
