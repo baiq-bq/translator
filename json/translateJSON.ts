@@ -1,3 +1,6 @@
+/**
+ * Representation of any JSON-compatible object used for translation.
+ */
 export type JSONObject = {
   [key: string]:
     | string
@@ -7,10 +10,24 @@ export type JSONObject = {
     | JSONObject;
 };
 
+/**
+ * Recursively translate the values of a JSON object.
+ *
+ * @param json The JSON object whose string fields should be translated.
+ * @param targetLang ISO language code the values will be translated to.
+ * @param translateTextFn Function used to translate individual strings.
+ * @returns A new JSON object with all translatable fields translated.
+ *
+ * @example
+ * ```ts
+ * const translated = await translateJson({ greeting: "Hello" }, "fr", translateText);
+ * // => { greeting: "Bonjour" }
+ * ```
+ */
 const translateJson = async (
   json: JSONObject,
   targetLang: string,
-  translateTextFn: (text: string, targetLang: string) => Promise<string>
+  translateTextFn: (text: string, targetLang: string) => Promise<string>,
 ): Promise<JSONObject> => {
   const result: JSONObject = {};
 
@@ -19,7 +36,7 @@ const translateJson = async (
       result[key] = await translateJson(
         value as JSONObject,
         targetLang,
-        translateTextFn
+        translateTextFn,
       );
       continue;
     } else if (Array.isArray(value)) {
@@ -31,12 +48,12 @@ const translateJson = async (
             return await translateJson(
               item as JSONObject,
               targetLang,
-              translateTextFn
+              translateTextFn,
             );
           } else {
             return item;
           }
-        })
+        }),
       );
     } else if (typeof value === "string") {
       result[key] = await translateTextFn(value, targetLang);
