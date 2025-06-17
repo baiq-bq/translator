@@ -27,7 +27,7 @@ export type JSONObject = {
 const translateJSON = async (
   json: JSONObject,
   targetLang: string,
-  translateTextFn: (text: string, targetLang: string) => Promise<string>
+  translateTextFn: (text: string, targetLang: string) => Promise<string>,
 ): Promise<JSONObject> => {
   const result: JSONObject = {};
 
@@ -36,7 +36,7 @@ const translateJSON = async (
       result[key] = await translateJSON(
         value as JSONObject,
         targetLang,
-        translateTextFn
+        translateTextFn,
       );
       continue;
     } else if (Array.isArray(value)) {
@@ -48,12 +48,12 @@ const translateJSON = async (
             return await translateJSON(
               item as JSONObject,
               targetLang,
-              translateTextFn
+              translateTextFn,
             );
           } else {
             return item;
           }
-        })
+        }),
       );
     } else if (typeof value === "string") {
       result[key] = await translateTextFn(value, targetLang);

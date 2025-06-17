@@ -16,15 +16,14 @@ const args = parseArgs(["--engine", "--model", "--lang", "--file", "--key"], {
 
 if (!args.engine || !args.model || !args.lang || !args.file || !args.key) {
   console.error(
-    "Usage: deno run jsr:@baiq/translator/cli/translateJSON --engine <openai|google> --model <model> --lang <lang> --file <path> --key <api-key>"
+    "Usage: deno run jsr:@baiq/translator/cli/translateJSON --engine <openai|google> --model <model> --lang <lang> --file <path> --key <api-key>",
   );
   Deno.exit(1);
 }
 
-const apiKey =
-  args.key ??
+const apiKey = args.key ??
   Deno.env.get(
-    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY"
+    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY",
   ) ??
   "";
 
@@ -51,17 +50,11 @@ if (args.engine === "openai") {
 const fileContent = await Deno.readTextFile(args.file);
 const jsonData = JSON.parse(fileContent);
 
-<<<<<<< HEAD
 const chat = configureLangChain(config);
-const result = await translateJSON(jsonData, args.lang, (text, lang) =>
-  translateText(text, lang, chat)
-=======
-const chat = configureLangChainImpl(config);
-const result = await translateJson(
+const result = await translateJSON(
   jsonData,
   args.lang,
-  (text, lang) => translateTextImpl(text, lang, chat),
->>>>>>> 780770887973d0783798c0767410bebc6126af31
+  (text, lang) => translateText(text, lang, chat),
 );
 
 console.log(JSON.stringify(result, null, 2));

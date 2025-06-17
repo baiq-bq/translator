@@ -7,7 +7,9 @@ const chat = configureLangChain({
 });
 
 const data = { welcome: "Hello", nested: { bye: "Good bye" } };
-const translated = await translateJSON(data, "fr", (text, lang) =>
-  translateText(text, lang, chat)
+const translated = await translateJSON(
+  data,
+  "fr",
+  (text, lang) => translateText(text, lang, chat),
 );
 console.log(JSON.stringify(translated, null, 2));
