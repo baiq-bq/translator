@@ -1,7 +1,6 @@
 # `xml` module
 
-Helpers for translating XML strings using the
-[`deno-dom`](https://jsr.io/@b-fuze/deno-dom) DOM implementation.
+Helpers for translating XML strings without any third-party DOM library.
 
 Nested tags are handled recursively. When the specified `stopTag` is
 encountered, its contents are sent as a single block for translation.
