@@ -1,6 +1,6 @@
 # `cli` directory
 
-Command line utilities for translating text or JSON using the library.
+Command line utilities for translating text, JSON, or XML using the library.
 
 Each command reads the API key from either the command line (`--key`) or the
 appropriate environment variable (`OPENAI_API_KEY` or `GOOGLE_API_KEY`).
@@ -25,4 +25,15 @@ deno run jsr:@baiq/translator/cli/translateJSON \
   --model gemini-1.5-flash \
   --lang fr \
   --file data.json
+```
+
+## Translate an XML file
+
+```sh
+deno run jsr:@baiq/translator/cli/translateXML \
+  --engine openai \
+  --model gpt-4o \
+  --lang fr \
+  --file data.xml \
+  --stopTag paragraph
 ```
