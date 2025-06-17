@@ -1,4 +1,4 @@
-import { DOMParser } from "deno-dom";
+import { DOMParser, type Element, type Node } from "deno-dom";
 
 /**
  * Recursively translate the text content of an XML string.
@@ -7,10 +7,10 @@ const translateXML = async (
   xml: string,
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
-  stopTag?: string,
+  stopTag?: string
 ): Promise<string> => {
   const parser = new DOMParser();
-  const doc = parser.parseFromString(xml, "text/xml");
+  const doc = parser.parseFromString(xml, "application/xml");
   const document = doc as unknown as Node;
 
   async function translateNode(node: Node): Promise<void> {
@@ -18,7 +18,7 @@ const translateXML = async (
       if (child.nodeType === 3) {
         child.nodeValue = await translateTextFn(
           child.nodeValue ?? "",
-          targetLang,
+          targetLang
         );
       } else if (child.nodeType === 1) {
         const element = child as Element;
