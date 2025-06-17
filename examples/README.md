@@ -30,3 +30,9 @@ deno run jsr:@baiq/translator/cli/translateJSON \
   --lang fr \
   --file data.json
 ```
+
+You can also translate XML files:
+
+```sh
+deno run -A examples/translate_xml.ts
+```

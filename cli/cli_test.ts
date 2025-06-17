@@ -2,7 +2,14 @@ import { assertEquals } from "@std/assert";
 
 async function run(args: string[], env: Record<string, string>) {
   const cmd = new Deno.Command(Deno.execPath(), {
-    args: ["run", "--allow-env", "--allow-read", "--allow-write", ...args],
+    args: [
+      "run",
+      "--allow-read",
+      "--allow-env",
+      "--allow-write",
+      ...args,
+      "--testMode",
+    ],
     env,
     stdout: "piped",
     stderr: "piped",
@@ -40,7 +47,7 @@ Deno.test("translateText CLI", async () => {
       "--text=Hello",
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" }
+    {} // no env needed
   );
   assertEquals(code, 0);
   assertEquals(stdout.trim(), "Hello-fr");
@@ -61,7 +68,7 @@ Deno.test("translateJSON CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" }
+    {}
   );
 
   assertEquals(code, 0);
@@ -85,9 +92,60 @@ Deno.test("translateXML CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" }
+    {}
   );
   assertEquals(code, 0);
   assertEquals(stdout.trim(), "<root><a>Hello-fr</a><b>World-fr</b></root>");
+  await Deno.remove(tmp);
+});
+
+Deno.test("translateXML with attributes CLI", async () => {
+  const tmp = await Deno.makeTempFile({ suffix: ".xml" });
+  await Deno.writeTextFile(
+    tmp,
+    "<root att='value'><a>Hello</a><b>World</b></root>"
+  );
+  const { code, stdout } = await run(
+    [
+      "translateXML.ts",
+      "--engine=openai",
+      "--model=gpt-4o",
+      "--lang=fr",
+      "--file=" + tmp,
+      "--key=dummy",
+    ],
+    {}
+  );
+  assertEquals(code, 0);
+  assertEquals(
+    stdout.trim(),
+    '<root att="value"><a>Hello-fr</a><b>World-fr</b></root>'
+  );
+  await Deno.remove(tmp);
+});
+
+Deno.test("translateXML with stopTag CLI", async () => {
+  const tmp = await Deno.makeTempFile({ suffix: ".xml" });
+  await Deno.writeTextFile(
+    tmp,
+    "<root att='value'><a>Hello</a><b att=\"othervalue\">World <i>of People</i></b></root>"
+  );
+  const { code, stdout } = await run(
+    [
+      "translateXML.ts",
+      "--engine=openai",
+      "--model=gpt-4o",
+      "--lang=fr",
+      "--file=" + tmp,
+      "--key=dummy",
+      "--stopTag=b",
+    ],
+    {}
+  );
+  assertEquals(code, 0);
+  assertEquals(
+    stdout.trim(),
+    '<root att="value"><a>Hello-fr</a><b att="othervalue">World <i>of People</i>-fr</b></root>'
+  );
   await Deno.remove(tmp);
 });
