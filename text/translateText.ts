@@ -21,11 +21,10 @@ import { HumanMessage } from "@langchain/core/messages";
  * console.log(translated); // Bonjour
  * ```
  */
-
 const translateText = async (
   text: string,
   targetLang: string,
-  chat: ChatOpenAI | ChatGoogleGenerativeAI,
+  chat: ChatOpenAI | ChatGoogleGenerativeAI
 ): Promise<string> => {
   const prompt = [
     `You are a professional translator.`,
@@ -34,6 +33,7 @@ const translateText = async (
     `Do not add any extra text, explanations, or comments.`,
     `If the text contains JSON, return only the translated JSON. Ensure it is syntactically valid and properly escaped, without wrapping it in backticks.`,
     `If the text contains Markdown, XML or HTML, preserve the structure exactly as in the original — do not wrap it in code blocks or add backticks.`,
+    `If the text contains XML or HTML do not translate the tags, only the text content.`,
     `If the text is a single word or phrase, translate it directly without additional context.`,
     `Keep a similar length to the original while adapting the wording.`,
     "",

@@ -105,6 +105,14 @@ async function translateNode(
   }
 }
 
+/**
+ *
+ * @param xml The XML string to translate.
+ * @param targetLang The target language to translate the XML into.
+ * @param translateTextFn The function to use for translating text.
+ * @param stopTag An optional tag name to stop translation at.
+ * @returns The translated XML string.
+ */
 const translateXML = async (
   xml: string,
   targetLang: string,
