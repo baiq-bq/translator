@@ -20,7 +20,11 @@ export type JSONObject = {
  *
  * @example
  * ```ts
- * const translated = await translateJSON({ greeting: "Hello" }, "fr", translateText);
+ * const translated = await translateJSON(
+ *   { greeting: "Hello" },
+ *   "fr",
+ *   translateText,
+ * );
  * // => { greeting: "Bonjour" }
  * ```
  */

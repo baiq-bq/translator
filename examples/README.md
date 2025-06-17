@@ -2,7 +2,8 @@
 
 These small clis demonstrate how to use the library.
 
-Run them with Deno after setting the appropriate API key in your environment:
+Run them with Deno after setting the appropriate API key in your environment.
+The examples rely on the `OPENAI_API_KEY` or `GOOGLE_API_KEY` variables.
 
 ```sh
 deno run -A examples/translate_text.ts
@@ -17,6 +18,8 @@ deno run jsr:@baiq/translator/cli/translateText \
   --lang fr \
   --text "Hello"
 ```
+
+Both CLI examples accept `--key` to override the API key on the command line.
 
 You can also translate JSON files:
 

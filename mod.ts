@@ -1,3 +1,10 @@
+/**
+ * Entry point exporting all translation utilities.
+ *
+ * Re-exports {@link configureLangChain}, {@link translateJSON} and
+ * {@link translateText} so consumers can import everything from the package
+ * root. API keys can be supplied directly or via environment variables.
+ */
 import translateJSON from "./json/mod.ts";
 import translateText from "./text/mod.ts";
 import {
@@ -7,12 +14,5 @@ import {
   type OpenAIModel,
 } from "./LangChainConfig.ts";
 
-/**
- * Entry point exporting all translation utilities.
- *
- * Use {@link configureLangChain} to create a chat client and then pass it to
- * {@link translateText} or combine it with {@link translateJSON} to translate
- * JSON structures.
- */
 export { configureLangChain, translateJSON, translateText };
 export type { GoogleModel, LangChainConfig, OpenAIModel };
