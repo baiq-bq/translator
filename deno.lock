@@ -1,9 +1,27 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@std/assert@0.224": "0.224.0",
+    "jsr:@std/cli@^1.0.20": "1.0.20",
+    "jsr:@std/flags@0.224": "0.224.0",
     "npm:@langchain/core@~0.3.58": "0.3.58_zod@3.25.32",
     "npm:@langchain/google-genai@~0.2.12": "0.2.12_@langchain+core@0.3.58__zod@3.25.32",
-    "npm:@langchain/openai@~0.5.13": "0.5.13_@langchain+core@0.3.58__openai@4.104.0___zod@3.25.32__zod@3.25.32_zod@3.25.32_openai@4.104.0__zod@3.25.32"
+    "npm:@langchain/openai@~0.5.13": "0.5.13_@langchain+core@0.3.58__openai@4.104.0___zod@3.25.32__zod@3.25.32_zod@3.25.32_openai@4.104.0__zod@3.25.32",
+    "npm:@types/node@*": "22.15.15"
+  },
+  "jsr": {
+    "@std/assert@0.224.0": {
+      "integrity": "8643233ec7aec38a940a8264a6e3eed9bfa44e7a71cc6b3c8874213ff401967f"
+    },
+    "@std/cli@1.0.20": {
+      "integrity": "a8c384a2c98cec6ec6a2055c273a916e2772485eb784af0db004c5ab8ba52333"
+    },
+    "@std/flags@0.224.0": {
+      "integrity": "d40eaf58c356b2e1313c6d4e62dc28b614aad2ddae6f5ff72a969e0b1f5ad689",
+      "dependencies": [
+        "jsr:@std/assert"
+      ]
+    }
   },
   "npm": {
     "@cfworker/json-schema@4.1.1": {
@@ -415,6 +433,8 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@std/cli@^1.0.20",
+      "jsr:@std/flags@0.224",
       "npm:@langchain/core@~0.3.58",
       "npm:@langchain/google-genai@~0.2.12",
       "npm:@langchain/openai@~0.5.13"

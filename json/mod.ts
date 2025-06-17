@@ -1,3 +1,3 @@
-import translateJson from "./translateJSON.ts";
+import translateJSON from "./translateJSON.ts";
 
-export default translateJson;
+export default translateJSON;

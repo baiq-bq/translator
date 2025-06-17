@@ -16,15 +16,17 @@ const args = parse(Deno.args, {
 
 if (!args.engine || !args.model || !args.lang || !args.text) {
   console.error(
-    "Usage: deno run jsr:@baiq/translator/script/translateText --engine <openai|google> --model <model> --lang <lang> --text <text> [--key <api-key>]",
+    "Usage: deno run jsr:@baiq/translator/cli/translateText --engine <openai|google> --model <model> --lang <lang> --text <text> [--key <api-key>]"
   );
   Deno.exit(1);
 }
 
-const apiKey = args.key ??
+const apiKey =
+  args.key ??
   Deno.env.get(
-    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY",
-  ) ?? "";
+    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY"
+  ) ??
+  "";
 
 if (!apiKey) {
   console.error("API key must be provided via --key or environment variable");

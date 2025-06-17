@@ -1,6 +1,6 @@
 # Examples
 
-These small scripts demonstrate how to use the library.
+These small clis demonstrate how to use the library.
 
 Run them with Deno after setting the appropriate API key in your environment:
 
@@ -11,7 +11,7 @@ deno run -A examples/translate_text.ts
 Alternatively use the bundled CLI to translate text:
 
 ```sh
-deno run jsr:@baiq/translator/script/translateText \
+deno run jsr:@baiq/translator/cli/translateText \
   --engine openai \
   --model gpt-4o \
   --lang fr \
@@ -21,7 +21,7 @@ deno run jsr:@baiq/translator/script/translateText \
 You can also translate JSON files:
 
 ```sh
-deno run jsr:@baiq/translator/script/translateJSON \
+deno run jsr:@baiq/translator/cli/translateJSON \
   --engine google \
   --model gemini-1.5-flash \
   --lang fr \

@@ -5,7 +5,7 @@ Utilities for translating text or JSON data using LangChain chat models.
 ## Usage
 
 ```ts
-import { configureLangChain, translateJson, translateText } from "./mod.ts";
+import { configureLangChain, translateJSON, translateText } from "./mod.ts";
 
 const chat = configureLangChain({
   name: "openai",
@@ -21,7 +21,7 @@ console.log(result); // Bonjour
 
 ```ts
 const data = { greeting: "Hello", nested: { bye: "Good bye" } };
-const translated = await translateJson(
+const translated = await translateJSON(
   data,
   "fr",
   (text, lang) => translateText(text, lang, chat),
@@ -35,7 +35,7 @@ console.log(translated);
 Translate a short text directly from the command line:
 
 ```sh
-deno run jsr:@baiq/translator/script/translateText \
+deno run jsr:@baiq/translator/cli/translateText \
   --engine openai \
   --model gpt-4o \
   --lang fr \
@@ -45,7 +45,7 @@ deno run jsr:@baiq/translator/script/translateText \
 You can also translate a JSON file:
 
 ```sh
-deno run jsr:@baiq/translator/script/translateJSON \
+deno run jsr:@baiq/translator/cli/translateJSON \
   --engine google \
   --model gemini-1.5-flash \
   --lang fr \

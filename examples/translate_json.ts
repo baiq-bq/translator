@@ -1,4 +1,4 @@
-import { configureLangChain, translateJson, translateText } from "../mod.ts";
+import { configureLangChain, translateJSON, translateText } from "../mod.ts";
 
 const chat = configureLangChain({
   name: "google",
@@ -7,9 +7,7 @@ const chat = configureLangChain({
 });
 
 const data = { welcome: "Hello", nested: { bye: "Good bye" } };
-const translated = await translateJson(
-  data,
-  "fr",
-  (text, lang) => translateText(text, lang, chat),
+const translated = await translateJSON(data, "fr", (text, lang) =>
+  translateText(text, lang, chat)
 );
 console.log(JSON.stringify(translated, null, 2));

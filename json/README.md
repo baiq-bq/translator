@@ -5,7 +5,7 @@ Helpers for translating values of JSON objects.
 ## Example
 
 ```ts
-import { configureLangChain, translateJson, translateText } from "../mod.ts";
+import { configureLangChain, translateJSON, translateText } from "../mod.ts";
 
 const chat = configureLangChain({
   name: "google",
@@ -14,7 +14,7 @@ const chat = configureLangChain({
 });
 
 const data = { greeting: "Hello" };
-const translated = await translateJson(
+const translated = await translateJSON(
   data,
   "es",
   (text, lang) => translateText(text, lang, chat),
@@ -25,7 +25,7 @@ console.log(translated); // { greeting: "Hola" }
 ### CLI
 
 ```sh
-deno run jsr:@baiq/translator/script/translateJSON \
+deno run jsr:@baiq/translator/cli/translateJSON \
   --engine google \
   --model gemini-1.5-flash \
   --lang es \

@@ -20,7 +20,7 @@ console.log(greeting); // Hallo
 ### CLI
 
 ```sh
-deno run jsr:@baiq/translator/script/translateText \
+deno run jsr:@baiq/translator/cli/translateText \
   --engine openai \
   --model gpt-4o \
   --lang de \

@@ -20,23 +20,23 @@ export type JSONObject = {
  *
  * @example
  * ```ts
- * const translated = await translateJson({ greeting: "Hello" }, "fr", translateText);
+ * const translated = await translateJSON({ greeting: "Hello" }, "fr", translateText);
  * // => { greeting: "Bonjour" }
  * ```
  */
-const translateJson = async (
+const translateJSON = async (
   json: JSONObject,
   targetLang: string,
-  translateTextFn: (text: string, targetLang: string) => Promise<string>,
+  translateTextFn: (text: string, targetLang: string) => Promise<string>
 ): Promise<JSONObject> => {
   const result: JSONObject = {};
 
   for (const [key, value] of Object.entries(json)) {
     if (typeof value === "object" && value !== null && !Array.isArray(value)) {
-      result[key] = await translateJson(
+      result[key] = await translateJSON(
         value as JSONObject,
         targetLang,
-        translateTextFn,
+        translateTextFn
       );
       continue;
     } else if (Array.isArray(value)) {
@@ -45,15 +45,15 @@ const translateJson = async (
           if (typeof item === "string") {
             return await translateTextFn(item, targetLang);
           } else if (typeof item === "object" && item !== null) {
-            return await translateJson(
+            return await translateJSON(
               item as JSONObject,
               targetLang,
-              translateTextFn,
+              translateTextFn
             );
           } else {
             return item;
           }
-        }),
+        })
       );
     } else if (typeof value === "string") {
       result[key] = await translateTextFn(value, targetLang);
@@ -67,4 +67,4 @@ const translateJson = async (
   return result;
 };
 
-export default translateJson;
+export default translateJSON;

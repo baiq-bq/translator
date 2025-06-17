@@ -1,31 +1,32 @@
 #!/usr/bin/env -S deno run --allow-env --allow-net --allow-read
 
-import { parse } from "https://deno.land/std@0.224.0/flags/mod.ts";
+import { parseArgs } from "@std/cli/parse-args";
+
 import {
   configureLangChain,
-  type GoogleModel,
   type LangChainConfig,
-  type OpenAIModel,
-  translateJson,
+  translateJSON,
   translateText,
 } from "../mod.ts";
+import { GoogleModel, OpenAIModel } from "../LangChainConfig.ts";
 
-const args = parse(Deno.args, {
+const args = parseArgs(["--engine", "--model", "--lang", "--file", "--key"], {
   string: ["engine", "model", "lang", "file", "key"],
-  alias: { e: "engine", m: "model", l: "lang", f: "file", k: "key" },
 });
 
-if (!args.engine || !args.model || !args.lang || !args.file) {
+if (!args.engine || !args.model || !args.lang || !args.file || !args.key) {
   console.error(
-    "Usage: deno run jsr:@baiq/translator/script/translateJSON --engine <openai|google> --model <model> --lang <lang> --file <path> [--key <api-key>]",
+    "Usage: deno run jsr:@baiq/translator/cli/translateJSON --engine <openai|google> --model <model> --lang <lang> --file <path> --key <api-key>"
   );
   Deno.exit(1);
 }
 
-const apiKey = args.key ??
+const apiKey =
+  args.key ??
   Deno.env.get(
-    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY",
-  ) ?? "";
+    args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY"
+  ) ??
+  "";
 
 if (!apiKey) {
   console.error("API key must be provided via --key or environment variable");
@@ -51,10 +52,8 @@ const fileContent = await Deno.readTextFile(args.file);
 const jsonData = JSON.parse(fileContent);
 
 const chat = configureLangChain(config);
-const result = await translateJson(
-  jsonData,
-  args.lang,
-  (text, lang) => translateText(text, lang, chat),
+const result = await translateJSON(jsonData, args.lang, (text, lang) =>
+  translateText(text, lang, chat)
 );
 
 console.log(JSON.stringify(result, null, 2));
