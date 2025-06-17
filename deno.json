@@ -5,6 +5,7 @@
   "license": "MIT",
   "imports": {
     "@langchain/core": "npm:@langchain/core@^0.3.58",
+    "@langchain/google-genai": "npm:@langchain/google-genai@^0.2.12",
     "@langchain/openai": "npm:@langchain/openai@^0.5.13"
   },
   "tasks": {

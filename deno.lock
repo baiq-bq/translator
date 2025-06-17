@@ -2,11 +2,15 @@
   "version": "5",
   "specifiers": {
     "npm:@langchain/core@~0.3.58": "0.3.58_zod@3.25.32",
+    "npm:@langchain/google-genai@~0.2.12": "0.2.12_@langchain+core@0.3.58__zod@3.25.32",
     "npm:@langchain/openai@~0.5.13": "0.5.13_@langchain+core@0.3.58__openai@4.104.0___zod@3.25.32__zod@3.25.32_zod@3.25.32_openai@4.104.0__zod@3.25.32"
   },
   "npm": {
     "@cfworker/json-schema@4.1.1": {
       "integrity": "sha512-gAmrUZSGtKc3AiBL71iNWxDsyUC5uMaKKGdvzYsBoTW/xi42JQHl7eKV2OYzCUqvc+D2RCcf7EXY2iCyFIk6og=="
+    },
+    "@google/generative-ai@0.24.1": {
+      "integrity": "sha512-MqO+MLfM6kjxcKoy0p1wRzG3b4ZZXtPI+z2IE26UogS2Cm/XHO+7gGRBh6gcJsOiIVoH93UwKvW4HdgiOZCy9Q=="
     },
     "@langchain/core@0.3.58_openai@4.104.0__zod@3.25.32_zod@3.25.32": {
       "integrity": "sha512-HLkOtVofgBHefaUae/+2fLNkpMLzEjHSavTmUF0YC7bDa5NPIZGlP80CGrSFXAeJ+WCPd8rIK8K/p6AW94inUQ==",
@@ -20,7 +24,7 @@
         "mustache",
         "p-queue",
         "p-retry",
-        "uuid",
+        "uuid@10.0.0",
         "zod",
         "zod-to-json-schema"
       ]
@@ -37,9 +41,17 @@
         "mustache",
         "p-queue",
         "p-retry",
-        "uuid",
+        "uuid@10.0.0",
         "zod",
         "zod-to-json-schema"
+      ]
+    },
+    "@langchain/google-genai@0.2.12_@langchain+core@0.3.58__zod@3.25.32": {
+      "integrity": "sha512-dVfkNW3uJ2Ing4KAYPTfkdTDIA4FDrik/YK5A5bE8w7drP0J+7g0h2i8D5Mn7dDcyPuX74qd2VG9hWCyGLtZiw==",
+      "dependencies": [
+        "@google/generative-ai",
+        "@langchain/core@0.3.58_zod@3.25.32",
+        "uuid@11.1.0"
       ]
     },
     "@langchain/openai@0.5.13_@langchain+core@0.3.58__openai@4.104.0___zod@3.25.32__zod@3.25.32_zod@3.25.32_openai@4.104.0__zod@3.25.32": {
@@ -270,7 +282,7 @@
         "p-queue",
         "p-retry",
         "semver",
-        "uuid"
+        "uuid@10.0.0"
       ],
       "optionalPeers": [
         "openai"
@@ -374,6 +386,10 @@
       "integrity": "sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==",
       "bin": true
     },
+    "uuid@11.1.0": {
+      "integrity": "sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==",
+      "bin": true
+    },
     "web-streams-polyfill@4.0.0-beta.3": {
       "integrity": "sha512-QW95TCTaHmsYfHDybGMwO5IJIM93I/6vTRk+daHTWFPhwh+C8Cg7j7XyKrwrj8Ib6vYXe0ocYNrmzY4xAAN6ug=="
     },
@@ -400,6 +416,7 @@
   "workspace": {
     "dependencies": [
       "npm:@langchain/core@~0.3.58",
+      "npm:@langchain/google-genai@~0.2.12",
       "npm:@langchain/openai@~0.5.13"
     ]
   }
