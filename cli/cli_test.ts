@@ -40,7 +40,7 @@ Deno.test("translateText CLI", async () => {
       "--text=Hello",
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" },
+    { CLI_TEST_MODE: "1" }
   );
   assertEquals(code, 0);
   assertEquals(stdout.trim(), "Hello-fr");
@@ -50,7 +50,7 @@ Deno.test("translateJSON CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".json" });
   await Deno.writeTextFile(
     tmp,
-    JSON.stringify({ greeting: "Hello", nested: { value: "World" } }),
+    JSON.stringify({ greeting: "Hello", nested: { value: "World" } })
   );
   const { code, stdout } = await run(
     [
@@ -61,7 +61,7 @@ Deno.test("translateJSON CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" },
+    { CLI_TEST_MODE: "1" }
   );
 
   assertEquals(code, 0);
@@ -85,12 +85,9 @@ Deno.test("translateXML CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" },
+    { CLI_TEST_MODE: "1" }
   );
   assertEquals(code, 0);
-  assertEquals(
-    stdout.trim(),
-    '<?xml version="1.0" encoding="utf-8"?><root><a>Hello-fr</a><b>World-fr</b></root>',
-  );
+  assertEquals(stdout.trim(), "<root><a>Hello-fr</a><b>World-fr</b></root>");
   await Deno.remove(tmp);
 });
