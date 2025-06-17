@@ -40,20 +40,20 @@ Translate a short text directly from the command line:
 
 ```sh
 deno run jsr:@baiq/translator/cli/translateText \
-  --engine openai \
-  --model gpt-4o \
-  --lang fr \
-  --text "Hello"
+  --engine=openai \
+  --model=gpt-4o \
+  --lang=fr \
+  --text="Hello"
 ```
 
 You can also translate a JSON file:
 
 ```sh
 deno run jsr:@baiq/translator/cli/translateJSON \
-  --engine google \
-  --model gemini-1.5-flash \
-  --lang fr \
-  --file data.json
+  --engine=google \
+  --model=gemini-1.5-flash \
+  --lang=fr \
+  --file=data.json
 ```
 
 Both commands also accept an `--key` flag for providing the API key explicitly.
