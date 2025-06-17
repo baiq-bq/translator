@@ -2,6 +2,9 @@
 
 Command line utilities for translating text or JSON using the library.
 
+Each command reads the API key from either the command line (`--key`) or the
+appropriate environment variable (`OPENAI_API_KEY` or `GOOGLE_API_KEY`).
+
 ## Translate a short text
 
 ```sh

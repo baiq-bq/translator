@@ -1,8 +1,12 @@
 # translator
 
-Utilities for translating text or JSON data using LangChain chat models.
+Utilities for translating plain text or the values of JSON objects using
+LangChain chat models.
 
 ## Usage
+
+First configure a LangChain chat client. The API key can be supplied directly or
+via the `OPENAI_API_KEY` or `GOOGLE_API_KEY` environment variables.
 
 ```ts
 import { configureLangChain, translateJSON, translateText } from "./mod.ts";
@@ -20,7 +24,7 @@ console.log(result); // Bonjour
 ### JSON translation
 
 ```ts
-const data = { greeting: "Hello", nested: { bye: "Good bye" } };
+const data = { greeting: "Hello", nested: { bye: "Goodbye" } };
 const translated = await translateJSON(
   data,
   "fr",
@@ -51,3 +55,5 @@ deno run jsr:@baiq/translator/cli/translateJSON \
   --lang fr \
   --file data.json
 ```
+
+Both commands also accept an `--key` flag for providing the API key explicitly.
