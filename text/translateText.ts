@@ -27,9 +27,11 @@ const translateText = async (
   targetLang: string,
   chat: ChatOpenAI | ChatGoogleGenerativeAI,
 ): Promise<string> => {
-  const prompt = `Translate the following text to ${targetLang}: ${text}. ` +
-    "Do not include any additional text or formatting. Just return the translated text. " +
-    "Text is aimed for a web application, so keep it concise and clear.";
+  const prompt = `Translate the following text to ${targetLang}. ` +
+    "The input may contain Markdown, HTML or embedded JSON. " +
+    "Keep the exact same structure and only translate the textual content. " +
+    "Do not add any extra text or formatting.\n\n" +
+    text;
   const response = await chat.invoke([
     new HumanMessage(prompt),
   ]);
