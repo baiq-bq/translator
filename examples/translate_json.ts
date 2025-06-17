@@ -2,7 +2,7 @@ import { configureLangChain, translateJson, translateText } from "../mod.ts";
 
 const chat = configureLangChain({
   name: "google",
-  model: "gemini-1.5-pro",
+  model: "gemini-1.5-flash",
   apiKey: Deno.env.get("GOOGLE_API_KEY") ?? "", // replace with your key
 });
 

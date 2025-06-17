@@ -9,7 +9,7 @@ import { configureLangChain, translateJson, translateText } from "./mod.ts";
 
 const chat = configureLangChain({
   name: "openai",
-  model: "gpt-3.5-turbo",
+  model: "gpt-4o",
   apiKey: "YOUR_OPENAI_KEY",
 });
 
@@ -28,4 +28,26 @@ const translated = await translateJson(
 );
 console.log(translated);
 // { greeting: "Bonjour", nested: { bye: "Au revoir" } }
+```
+
+### CLI usage
+
+Translate a short text directly from the command line:
+
+```sh
+deno run jsr:@baiq/translator/script/translateText \
+  --engine openai \
+  --model gpt-4o \
+  --lang fr \
+  --text "Hello"
+```
+
+You can also translate a JSON file:
+
+```sh
+deno run jsr:@baiq/translator/script/translateJSON \
+  --engine google \
+  --model gemini-1.5-flash \
+  --lang fr \
+  --file data.json
 ```

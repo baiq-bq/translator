@@ -2,7 +2,7 @@ import { configureLangChain, translateText } from "../mod.ts";
 
 const chat = configureLangChain({
   name: "openai",
-  model: "gpt-3.5-turbo",
+  model: "gpt-4o",
   apiKey: Deno.env.get("OPENAI_API_KEY") ?? "", // replace with your key
 });
 

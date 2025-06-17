@@ -2,6 +2,25 @@ import { ChatOpenAI } from "@langchain/openai";
 import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 /**
+ * All supported OpenAI chat models.
+ */
+export type OpenAIModel =
+  | "gpt-3.5-turbo"
+  | "gpt-3.5-turbo-0125"
+  | "gpt-4"
+  | "gpt-4-turbo"
+  | "gpt-4o";
+
+/**
+ * All supported Google Generative AI chat models.
+ */
+export type GoogleModel =
+  | "gemini-pro"
+  | "gemini-pro-vision"
+  | "gemini-1.5-pro"
+  | "gemini-1.5-flash";
+
+/**
  * Configuration options for creating a LangChain chat client.
  *
  * The API key must be provided explicitly instead of relying on
@@ -9,8 +28,8 @@ import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
  * credentials directly.
  */
 export type LangChainConfig =
-  | { name: "openai"; model: "gpt-3.5-turbo" | "gpt-4"; apiKey: string }
-  | { name: "google"; model: "gemini-1.5-pro"; apiKey: string };
+  | { name: "openai"; model: OpenAIModel; apiKey: string }
+  | { name: "google"; model: GoogleModel; apiKey: string };
 
 /**
  * Create a chat instance for the selected AI provider.
