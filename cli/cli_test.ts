@@ -2,7 +2,7 @@ import { assertEquals } from "@std/assert";
 
 async function run(args: string[], env: Record<string, string>) {
   const cmd = new Deno.Command(Deno.execPath(), {
-    args: ["run", "--allow-env", "--allow-read", "--allow-write", ...args],
+    args: ["run", "--allow-read", "--allow-write", ...args, "--testMode"],
     env,
     stdout: "piped",
     stderr: "piped",
@@ -40,7 +40,7 @@ Deno.test("translateText CLI", async () => {
       "--text=Hello",
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" }
+    {} // no env needed
   );
   assertEquals(code, 0);
   assertEquals(stdout.trim(), "Hello-fr");
@@ -61,7 +61,7 @@ Deno.test("translateJSON CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" }
+    {}
   );
 
   assertEquals(code, 0);
@@ -85,7 +85,7 @@ Deno.test("translateXML CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" }
+    {}
   );
   assertEquals(code, 0);
   assertEquals(stdout.trim(), "<root><a>Hello-fr</a><b>World-fr</b></root>");
