@@ -51,9 +51,17 @@ if (args.engine === "openai") {
 const fileContent = await Deno.readTextFile(args.file);
 const jsonData = JSON.parse(fileContent);
 
+<<<<<<< HEAD
 const chat = configureLangChain(config);
 const result = await translateJSON(jsonData, args.lang, (text, lang) =>
   translateText(text, lang, chat)
+=======
+const chat = configureLangChainImpl(config);
+const result = await translateJson(
+  jsonData,
+  args.lang,
+  (text, lang) => translateTextImpl(text, lang, chat),
+>>>>>>> 780770887973d0783798c0767410bebc6126af31
 );
 
 console.log(JSON.stringify(result, null, 2));
