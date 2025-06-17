@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+import { assertEquals, assertRejects } from "@std/assert";
 import type { ChatOpenAI } from "@langchain/openai";
 import translateText from "./translateText.ts";
 
@@ -18,20 +18,20 @@ Deno.test("returns translated text", async () => {
     "fr",
     chat as unknown as ChatOpenAI,
   );
-  assert.equal(result, "Bonjour");
-  assert.equal(chat.calls.length, 1);
+  assertEquals(result, "Bonjour");
+  assertEquals(chat.calls.length, 1);
 });
 
 Deno.test("throws if translation content missing", async () => {
   const chat = new MockChat(undefined);
-  await assert.rejects(() =>
+  await assertRejects(() =>
     translateText("Hello", "fr", chat as unknown as ChatOpenAI)
   );
 });
 
 Deno.test("throws if translation content is not string", async () => {
   const chat = new MockChat(42 as unknown);
-  await assert.rejects(() =>
+  await assertRejects(() =>
     translateText("Hello", "fr", chat as unknown as ChatOpenAI)
   );
 });

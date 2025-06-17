@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+import { assertEquals } from "@std/assert";
 import translateJSON, { type JSONObject } from "./translateJSON.ts";
 
 const stubTranslate = (text: string, lang: string) =>
@@ -7,7 +7,7 @@ const stubTranslate = (text: string, lang: string) =>
 Deno.test("translates simple fields", async () => {
   const input: JSONObject = { greeting: "Hello" };
   const result = await translateJSON(input, "fr", stubTranslate);
-  assert.deepEqual(result, { greeting: "Hello-fr" });
+  assertEquals(result, { greeting: "Hello-fr" });
 });
 
 Deno.test("handles nested structures", async () => {
@@ -16,7 +16,7 @@ Deno.test("handles nested structures", async () => {
     nested: { b: ["World", 5, true] },
   };
   const result = await translateJSON(input, "fr", stubTranslate);
-  assert.deepEqual(result, {
+  assertEquals(result, {
     a: "Hi-fr",
     nested: { b: ["World-fr", 5, true] },
   });

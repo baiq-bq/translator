@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+import { assertEquals } from "@std/assert";
 
 async function run(args: string[], env: Record<string, string>) {
   const cmd = new Deno.Command(Deno.execPath(), {
@@ -40,17 +40,17 @@ Deno.test("translateText CLI", async () => {
       "--text=Hello",
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" },
+    { CLI_TEST_MODE: "1" }
   );
-  assert.equal(code, 0);
-  assert.equal(stdout.trim(), "Hello-fr");
+  assertEquals(code, 0);
+  assertEquals(stdout.trim(), "Hello-fr");
 });
 
 Deno.test("translateJSON CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".json" });
   await Deno.writeTextFile(
     tmp,
-    JSON.stringify({ greeting: "Hello", nested: { value: "World" } }),
+    JSON.stringify({ greeting: "Hello", nested: { value: "World" } })
   );
   const { code, stdout } = await run(
     [
@@ -61,12 +61,12 @@ Deno.test("translateJSON CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" },
+    { CLI_TEST_MODE: "1" }
   );
 
-  assert.equal(code, 0);
+  assertEquals(code, 0);
   const out = JSON.parse(stdout);
-  assert.deepEqual(out, {
+  assertEquals(out, {
     greeting: "Hello-fr",
     nested: { value: "World-fr" },
   });
@@ -75,10 +75,7 @@ Deno.test("translateJSON CLI", async () => {
 
 Deno.test("translateXML CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".xml" });
-  await Deno.writeTextFile(
-    tmp,
-    "<root><a>Hello</a><b>World</b></root>",
-  );
+  await Deno.writeTextFile(tmp, "<root><a>Hello</a><b>World</b></root>");
   const { code, stdout } = await run(
     [
       "translateXML.ts",
@@ -88,9 +85,12 @@ Deno.test("translateXML CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    { CLI_TEST_MODE: "1" },
+    { CLI_TEST_MODE: "1" }
   );
-  assert.equal(code, 0);
-  assert.equal(stdout.trim(), "<root><a>Hello-fr</a><b>World-fr</b></root>");
+  assertEquals(code, 0);
+  assertEquals(
+    stdout.trim(),
+    '<?xml version="1.0" encoding="utf-8"?><root><a>Hello-fr</a><b>World-fr</b></root>'
+  );
   await Deno.remove(tmp);
 });
