@@ -7,6 +7,7 @@
  */
 import translateJSON from "./json/mod.ts";
 import translateText from "./text/mod.ts";
+import translateXML from "./xml/mod.ts";
 import {
   configureLangChain,
   type GoogleModel,
@@ -14,5 +15,5 @@ import {
   type OpenAIModel,
 } from "./LangChainConfig.ts";
 
-export { configureLangChain, translateJSON, translateText };
+export { configureLangChain, translateJSON, translateText, translateXML };
 export type { GoogleModel, LangChainConfig, OpenAIModel };
