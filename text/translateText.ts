@@ -30,10 +30,10 @@ const translateText = async (
   const prompt = [
     `You are a professional translator.`,
     `Translate and adapt the following text into ${targetLang}`,
-    `Preserve any HTML, Markdown, or JSON structures exactly as in the original.`,
+    `Preserve any HTML, Markdown, XML or JSON structures exactly as in the original.`,
     `Do not add any extra text, explanations, or comments.`,
     `If the text contains JSON, return only the translated JSON. Ensure it is syntactically valid and properly escaped, without wrapping it in backticks.`,
-    `If the text contains Markdown or HTML, preserve the structure exactly as in the original — do not wrap it in code blocks or add backticks.`,
+    `If the text contains Markdown, XML or HTML, preserve the structure exactly as in the original — do not wrap it in code blocks or add backticks.`,
     `If the text is a single word or phrase, translate it directly without additional context.`,
     `Keep a similar length to the original while adapting the wording.`,
     "",
