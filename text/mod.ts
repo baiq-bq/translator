@@ -11,7 +11,4 @@
  * @see {@link OpenAIModel} for the supported OpenAI models.
  * @see {@link GoogleModel} for the supported Google Generative AI models.
  */
-import translateText from "./translateText.ts";
-
-/** Re-export of {@link translateText}. */
-export default translateText;
+export { default, default as translateText } from "./translateText.ts";
