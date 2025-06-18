@@ -13,9 +13,24 @@ Deno.test("translates simple xml", async () => {
 Deno.test("stops recursion at tag", async () => {
   const input =
     "<page><paragraph><line>A example of paragraph</line><line>Another line</line></paragraph></page>";
-  const result = await translateXML(input, "es", stubTranslate, "paragraph");
+  const result = await translateXML(input, "es", stubTranslate, ["paragraph"]);
   assertEquals(
     result,
-    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`
+    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`,
+  );
+});
+
+Deno.test("handles multiple stop tags", async () => {
+  const input =
+    "<page><paragraph>Hello <i>World</i></paragraph><note>Other <b>Text</b></note></page>";
+  const result = await translateXML(
+    input,
+    "de",
+    stubTranslate,
+    ["paragraph", "note"],
+  );
+  assertEquals(
+    result,
+    `<page><paragraph>Hello <i>World</i>-de</paragraph><note>Other <b>Text</b>-de</note></page>`,
   );
 });

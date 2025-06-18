@@ -9,10 +9,10 @@ appropriate environment variable (`OPENAI_API_KEY` or `GOOGLE_API_KEY`).
 
 ```sh
 deno run jsr:@baiq/translator/cli/translateText \
-  --engine openai \
-  --model gpt-4o \
-  --lang es \
-  --text "Hello"
+  --engine=openai \
+  --model=gpt-4o \
+  --lang=es \
+  --text="Hello"
 ```
 
 This is also the default when running `jsr:@baiq/translator/cli`.
@@ -21,19 +21,22 @@ This is also the default when running `jsr:@baiq/translator/cli`.
 
 ```sh
 deno run jsr:@baiq/translator/cli/translateJSON \
-  --engine google \
-  --model gemini-1.5-flash \
-  --lang fr \
-  --file data.json
+  --engine=google \
+  --model=gemini-1.5-flash \
+  --lang=fr \
+  --file=data.json
 ```
 
 ## Translate an XML file
 
+The `--stopTags` flag accepts a comma-separated list of tag names whose contents
+should be translated as a single block.
+
 ```sh
 deno run jsr:@baiq/translator/cli/translateXML \
-  --engine openai \
-  --model gpt-4o \
-  --lang fr \
-  --file data.xml \
-  --stopTag paragraph
+  --engine=openai \
+  --model=gpt-4o \
+  --lang=fr \
+  --file=data.xml \
+  --stopTags=paragraph,note
 ```

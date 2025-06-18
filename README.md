@@ -42,7 +42,7 @@ const translatedXml = await translateXML(
   xml,
   "fr",
   (text, lang) => translateText(text, lang, chat),
-  "paragraph",
+  ["paragraph", "note"],
 );
 console.log(translatedXml);
 ```
@@ -77,7 +77,7 @@ deno run jsr:@baiq/translator/cli/translateXML \
   --model=gpt-4o \
   --lang=fr \
   --file=page.xml \
-  --stopTag=paragraph
+  --stopTags=paragraph,note
 ```
 
 Both commands also accept an `--key` flag for providing the API key explicitly.
