@@ -34,3 +34,15 @@ Deno.test("handles multiple stop tags", async () => {
     `<page><paragraph>Hello <i>World</i>-de</paragraph><note>Other <b>Text</b>-de</note></page>`,
   );
 });
+
+Deno.test("translates selected attributes", async () => {
+  const input = '<img alt="Hello" src="x.png" />';
+  const result = await translateXML(
+    input,
+    "fr",
+    stubTranslate,
+    undefined,
+    ["alt"],
+  );
+  assertEquals(result, '<img alt="Hello-fr" src="x.png" />');
+});

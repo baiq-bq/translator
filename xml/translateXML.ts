@@ -4,13 +4,14 @@ import type { Element, Node } from "jsdom";
 /**
  * Recursively translate the text content of a DOM node, preserving attributes and
  * structure. If `stopTags` are provided, the contents of those tags are
- * translated as a block.
+ * translated as a block. Selected attributes can be translated as well.
  */
 async function translateDomNode(
   node: Node,
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
   stopTags?: string[],
+  attributesToTranslate?: string[],
 ): Promise<void> {
   if (node.nodeType === node.TEXT_NODE) {
     // Translate text nodes
@@ -19,6 +20,16 @@ async function translateDomNode(
   }
   if (node.nodeType === node.ELEMENT_NODE) {
     const el = node as Element;
+    if (attributesToTranslate) {
+      for (const name of attributesToTranslate) {
+        const attr = Array.from(el.attributes).find((a) =>
+          a.name.toLowerCase() === name.toLowerCase()
+        );
+        if (attr) {
+          attr.value = await translateTextFn(attr.value, targetLang);
+        }
+      }
+    }
     if (
       stopTags?.some((tag) => tag.toLowerCase() === el.tagName.toLowerCase())
     ) {
@@ -29,7 +40,13 @@ async function translateDomNode(
     }
     // Recurse into children
     for (const child of Array.from(el.childNodes)) {
-      await translateDomNode(child, targetLang, translateTextFn, stopTags);
+      await translateDomNode(
+        child,
+        targetLang,
+        translateTextFn,
+        stopTags,
+        attributesToTranslate,
+      );
     }
   }
 }
@@ -40,6 +57,8 @@ async function translateDomNode(
  * @param targetLang The target language to translate the XML into.
  * @param translateTextFn The function to use for translating text.
  * @param stopTags Optional tag names to stop translation at.
+ * @param attributesToTranslate Optional attribute names that should be
+ *   translated when encountered.
  * @returns The translated XML string.
  */
 const translateXML = async (
@@ -47,6 +66,7 @@ const translateXML = async (
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
   stopTags?: string[],
+  attributesToTranslate?: string[],
 ): Promise<string> => {
   // Parse as XML
   const dom = new JSDOM(xml, { contentType: "text/xml" });
@@ -57,6 +77,7 @@ const translateXML = async (
     targetLang,
     translateTextFn,
     stopTags,
+    attributesToTranslate,
   );
   // Serialize back to XML
   // Remove XML declaration if present
