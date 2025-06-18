@@ -74,6 +74,13 @@ deno run jsr:@baiq/translator/cli/translateText \
   --text="Hello"
 ```
 
+When running in Node, execute the compiled script (or use `ts-node`) with the
+same flags:
+
+```sh
+node cli/translateText.js --engine=openai --model=gpt-4o --lang=fr --text "Hello"
+```
+
 You can also translate a JSON file:
 
 ```sh
@@ -96,3 +103,4 @@ deno run jsr:@baiq/translator/cli/translateXML \
 ```
 
 Both commands also accept an `--key` flag for providing the API key explicitly.
+The scripts behave the same when run under Node.
