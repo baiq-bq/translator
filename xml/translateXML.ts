@@ -11,7 +11,7 @@ async function translateDomNode(
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
   stopTags?: string[],
-  attributesToTranslate?: string[]
+  attributesToTranslate?: string[],
 ): Promise<void> {
   if (node.nodeType === node.TEXT_NODE) {
     // Translate text nodes
@@ -28,7 +28,7 @@ async function translateDomNode(
           const originalValue = el.getAttribute(attrName) ?? "";
           const translatedValue = await translateTextFn(
             originalValue,
-            targetLang
+            targetLang,
           );
           el.setAttribute(attrName, translatedValue);
         }
@@ -51,7 +51,7 @@ async function translateDomNode(
         targetLang,
         translateTextFn,
         stopTags,
-        attributesToTranslate
+        attributesToTranslate,
       );
     }
   }
@@ -72,7 +72,7 @@ const translateXML = async (
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
   stopTags?: string[],
-  attributesToTranslate?: string[]
+  attributesToTranslate?: string[],
 ): Promise<string> => {
   // Parse as XML
   const dom = new JSDOM(xml, { contentType: "text/xml" });
@@ -84,7 +84,7 @@ const translateXML = async (
     targetLang,
     translateTextFn,
     stopTags,
-    attributesToTranslate
+    attributesToTranslate,
   );
 
   // Serialize back to XML

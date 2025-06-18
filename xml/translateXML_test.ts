@@ -16,7 +16,7 @@ Deno.test("stops recursion at tag", async () => {
   const result = await translateXML(input, "es", stubTranslate, ["paragraph"]);
   assertEquals(
     result,
-    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`
+    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`,
   );
 });
 
@@ -29,7 +29,7 @@ Deno.test("handles multiple stop tags", async () => {
   ]);
   assertEquals(
     result,
-    `<page><paragraph>Hello <i>World</i>-de</paragraph><note>Other <b>Text</b>-de</note></page>`
+    `<page><paragraph>Hello <i>World</i>-de</paragraph><note>Other <b>Text</b>-de</note></page>`,
   );
 });
 
