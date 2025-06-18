@@ -42,9 +42,24 @@ const translatedXml = await translateXML(
   xml,
   "fr",
   (text, lang) => translateText(text, lang, chat),
-  "paragraph",
+  ["paragraph", "note"],
 );
 console.log(translatedXml);
+```
+
+To translate attributes such as `alt` in HTML, pass the attribute names as the
+last argument:
+
+```ts
+const html = '<img alt="Hello" src="pic.png" />';
+const translatedHtml = await translateXML(
+  html,
+  "fr",
+  (text, lang) => translateText(text, lang, chat),
+  undefined,
+  ["alt"],
+);
+console.log(translatedHtml);
 ```
 
 ### CLI usage
@@ -77,7 +92,7 @@ deno run jsr:@baiq/translator/cli/translateXML \
   --model=gpt-4o \
   --lang=fr \
   --file=page.xml \
-  --stopTag=paragraph
+  --stopTags=paragraph,note
 ```
 
 Both commands also accept an `--key` flag for providing the API key explicitly.

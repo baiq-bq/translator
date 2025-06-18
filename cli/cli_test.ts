@@ -47,7 +47,7 @@ Deno.test("translateText CLI", async () => {
       "--text=Hello",
       "--key=dummy",
     ],
-    {} // no env needed
+    {}, // no env needed
   );
   assertEquals(code, 0);
   assertEquals(stdout.trim(), "Hello-fr");
@@ -57,7 +57,7 @@ Deno.test("translateJSON CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".json" });
   await Deno.writeTextFile(
     tmp,
-    JSON.stringify({ greeting: "Hello", nested: { value: "World" } })
+    JSON.stringify({ greeting: "Hello", nested: { value: "World" } }),
   );
   const { code, stdout } = await run(
     [
@@ -68,7 +68,7 @@ Deno.test("translateJSON CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    {}
+    {},
   );
 
   assertEquals(code, 0);
@@ -92,7 +92,7 @@ Deno.test("translateXML CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    {}
+    {},
   );
   assertEquals(code, 0);
   assertEquals(stdout.trim(), "<root><a>Hello-fr</a><b>World-fr</b></root>");
@@ -103,7 +103,7 @@ Deno.test("translateXML with attributes CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".xml" });
   await Deno.writeTextFile(
     tmp,
-    "<root att='value'><a>Hello</a><b>World</b></root>"
+    "<root att='value'><a>Hello</a><b>World</b></root>",
   );
   const { code, stdout } = await run(
     [
@@ -114,21 +114,21 @@ Deno.test("translateXML with attributes CLI", async () => {
       "--file=" + tmp,
       "--key=dummy",
     ],
-    {}
+    {},
   );
   assertEquals(code, 0);
   assertEquals(
     stdout.trim(),
-    '<root att="value"><a>Hello-fr</a><b>World-fr</b></root>'
+    '<root att="value"><a>Hello-fr</a><b>World-fr</b></root>',
   );
   await Deno.remove(tmp);
 });
 
-Deno.test("translateXML with stopTag CLI", async () => {
+Deno.test("translateXML with stopTags CLI", async () => {
   const tmp = await Deno.makeTempFile({ suffix: ".xml" });
   await Deno.writeTextFile(
     tmp,
-    "<root att='value'><a>Hello</a><b att=\"othervalue\">World <i>of People</i></b></root>"
+    "<root att='value'><a>Hello</a><b att=\"othervalue\">World <i>of People</i></b></root>",
   );
   const { code, stdout } = await run(
     [
@@ -138,14 +138,40 @@ Deno.test("translateXML with stopTag CLI", async () => {
       "--lang=fr",
       "--file=" + tmp,
       "--key=dummy",
-      "--stopTag=b",
+      "--stopTags=b",
     ],
-    {}
+    {},
   );
   assertEquals(code, 0);
   assertEquals(
     stdout.trim(),
-    '<root att="value"><a>Hello-fr</a><b att="othervalue">World <i>of People</i>-fr</b></root>'
+    '<root att="value"><a>Hello-fr</a><b att="othervalue">World <i>of People</i>-fr</b></root>',
+  );
+  await Deno.remove(tmp);
+});
+
+Deno.test("translateXML with multiple stopTags CLI", async () => {
+  const tmp = await Deno.makeTempFile({ suffix: ".xml" });
+  await Deno.writeTextFile(
+    tmp,
+    "<root><a>Hello <i>World</i></a><b>Bye <i>Now</i></b></root>",
+  );
+  const { code, stdout } = await run(
+    [
+      "translateXML.ts",
+      "--engine=openai",
+      "--model=gpt-4o",
+      "--lang=fr",
+      "--file=" + tmp,
+      "--key=dummy",
+      "--stopTags=a,b",
+    ],
+    {},
+  );
+  assertEquals(code, 0);
+  assertEquals(
+    stdout.trim(),
+    "<root><a>Hello <i>World</i>-fr</a><b>Bye <i>Now</i>-fr</b></root>",
   );
   await Deno.remove(tmp);
 });

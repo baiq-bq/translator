@@ -2,8 +2,10 @@
 
 Helpers for translating XML strings without any third-party DOM library.
 
-Nested tags are handled recursively. When the specified `stopTag` is
-encountered, its contents are sent as a single block for translation.
+Nested tags are handled recursively. When any of the specified `stopTags` is
+encountered, its contents are sent as a single block for translation. Multiple
+tag names can be provided. Attributes are normally left as-is but you can
+specify a list of attribute names that should be translated.
 
 ## Example
 
@@ -21,7 +23,22 @@ const translated = await translateXML(
   xml,
   "es",
   (text, lang) => translateText(text, lang, chat),
-  "paragraph",
+  ["paragraph", "note"],
 );
 console.log(translated);
+```
+
+If you want to translate specific attributes, pass their names in the last
+argument:
+
+```ts
+const html = '<img alt="Hello" src="pic.png" />';
+const result = await translateXML(
+  html,
+  "es",
+  (text, lang) => translateText(text, lang, chat),
+  undefined,
+  ["alt"],
+);
+console.log(result); // <img alt="Hola" src="pic.png" />
 ```
