@@ -3,7 +3,7 @@
 // CLI helper that translates XML files recursively. The API key can be provided
 // via --key or read from OPENAI_API_KEY/GOOGLE_API_KEY.
 
-import { parseArgs } from "@std/cli/parse-args";
+import { exit, getArgs, getEnv, parseCliArgs, readText } from "./runtime.ts";
 
 import {
   configureLangChain,
@@ -18,10 +18,7 @@ import type { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 let translateTextImpl = translateText;
 let configureLangChainImpl = configureLangChain;
 
-const args = parseArgs(Deno.args, {
-  string: ["engine", "model", "lang", "file", "stopTag", "stopTags", "key"],
-  boolean: ["testMode"],
-});
+const args = parseCliArgs(getArgs()) as Record<string, string | boolean>;
 
 if (args.testMode) {
   translateTextImpl = (text: string, lang: string) =>
@@ -35,18 +32,18 @@ if (!args.engine || !args.model || !args.lang || !args.file) {
   console.error(
     "Usage: deno run jsr:@baiq/translator/cli/translateXML --engine=<openai|google> --model=<model> --lang=<lang> --file=<path-to-xml-file> [--stopTags=<tag1,tag2>] [--key=<api-key>]",
   );
-  Deno.exit(1);
+  exit(1);
 }
 
 const apiKey = args.key ??
-  Deno.env.get(
+  getEnv(
     args.engine === "openai" ? "OPENAI_API_KEY" : "GOOGLE_API_KEY",
   ) ??
   "";
 
 if (!apiKey) {
   console.error("API key must be provided via --key or environment variable");
-  Deno.exit(1);
+  exit(1);
 }
 
 let config: LangChainConfig;
@@ -64,7 +61,7 @@ if (args.engine === "openai") {
   };
 }
 
-const xml = await Deno.readTextFile(args.file);
+const xml = await readText(String(args.file));
 const chat = configureLangChainImpl(config);
 const stopTags = args.stopTags
   ? String(args.stopTags)

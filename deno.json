@@ -1,6 +1,6 @@
 {
   "name": "@baiq/translator",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "exports": {
     ".": "./mod.ts",
     "./json": "./json/mod.ts",
