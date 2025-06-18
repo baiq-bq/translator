@@ -16,33 +16,27 @@ Deno.test("stops recursion at tag", async () => {
   const result = await translateXML(input, "es", stubTranslate, ["paragraph"]);
   assertEquals(
     result,
-    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`,
+    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`
   );
 });
 
 Deno.test("handles multiple stop tags", async () => {
   const input =
     "<page><paragraph>Hello <i>World</i></paragraph><note>Other <b>Text</b></note></page>";
-  const result = await translateXML(
-    input,
-    "de",
-    stubTranslate,
-    ["paragraph", "note"],
-  );
+  const result = await translateXML(input, "de", stubTranslate, [
+    "paragraph",
+    "note",
+  ]);
   assertEquals(
     result,
-    `<page><paragraph>Hello <i>World</i>-de</paragraph><note>Other <b>Text</b>-de</note></page>`,
+    `<page><paragraph>Hello <i>World</i>-de</paragraph><note>Other <b>Text</b>-de</note></page>`
   );
 });
 
 Deno.test("translates selected attributes", async () => {
-  const input = '<img alt="Hello" src="x.png" />';
-  const result = await translateXML(
-    input,
-    "fr",
-    stubTranslate,
-    undefined,
-    ["alt"],
-  );
-  assertEquals(result, '<img alt="Hello-fr" src="x.png" />');
+  const input = '<img alt="Hello" src="x.png"/>';
+  const result = await translateXML(input, "fr", stubTranslate, undefined, [
+    "alt",
+  ]);
+  assertEquals(result, '<img alt="Hello-fr" src="x.png"/>');
 });

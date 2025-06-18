@@ -11,7 +11,7 @@ async function translateDomNode(
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
   stopTags?: string[],
-  attributesToTranslate?: string[],
+  attributesToTranslate?: string[]
 ): Promise<void> {
   if (node.nodeType === node.TEXT_NODE) {
     // Translate text nodes
@@ -20,32 +20,38 @@ async function translateDomNode(
   }
   if (node.nodeType === node.ELEMENT_NODE) {
     const el = node as Element;
+
+    // Translate specified attributes using standard DOM APIs
     if (attributesToTranslate) {
-      for (const name of attributesToTranslate) {
-        const attr = Array.from(el.attributes).find((a) =>
-          a.name.toLowerCase() === name.toLowerCase()
-        );
-        if (attr) {
-          attr.value = await translateTextFn(attr.value, targetLang);
+      for (const attrName of attributesToTranslate) {
+        if (el.hasAttribute(attrName)) {
+          const originalValue = el.getAttribute(attrName) ?? "";
+          const translatedValue = await translateTextFn(
+            originalValue,
+            targetLang
+          );
+          el.setAttribute(attrName, translatedValue);
         }
       }
     }
+
+    // If this tag is in stopTags, translate its entire innerHTML as a block
     if (
       stopTags?.some((tag) => tag.toLowerCase() === el.tagName.toLowerCase())
     ) {
-      // Translate the inner XML as a block
       const inner = el.innerHTML;
       el.innerHTML = await translateTextFn(inner, targetLang);
       return;
     }
-    // Recurse into children
+
+    // Recurse into child nodes
     for (const child of Array.from(el.childNodes)) {
       await translateDomNode(
         child,
         targetLang,
         translateTextFn,
         stopTags,
-        attributesToTranslate,
+        attributesToTranslate
       );
     }
   }
@@ -66,23 +72,24 @@ const translateXML = async (
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
   stopTags?: string[],
-  attributesToTranslate?: string[],
+  attributesToTranslate?: string[]
 ): Promise<string> => {
   // Parse as XML
   const dom = new JSDOM(xml, { contentType: "text/xml" });
   const doc = dom.window.document;
+
   // Translate starting from the root element
   await translateDomNode(
     doc.documentElement,
     targetLang,
     translateTextFn,
     stopTags,
-    attributesToTranslate,
+    attributesToTranslate
   );
+
   // Serialize back to XML
-  // Remove XML declaration if present
-  const result = doc.documentElement.outerHTML;
-  return result;
+  // Remove XML declaration if present by using outerHTML
+  return doc.documentElement.outerHTML;
 };
 
 export default translateXML;
