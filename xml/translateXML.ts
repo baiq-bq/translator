@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import type { Node, Element } from "jsdom";
+import type { Element, Node } from "jsdom";
 
 /**
  * Recursively translate the text content of a DOM node, preserving attributes and structure.
@@ -9,7 +9,8 @@ async function translateDomNode(
   node: Node,
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
-  stopTag?: string
+  stopTag?: string,
+  attrsToTranslate: string[] = [],
 ): Promise<void> {
   if (node.nodeType === node.TEXT_NODE) {
     // Translate text nodes
@@ -18,6 +19,13 @@ async function translateDomNode(
   }
   if (node.nodeType === node.ELEMENT_NODE) {
     const el = node as Element;
+    // Translate specified attributes on this element
+    for (const attr of attrsToTranslate) {
+      if (el.hasAttribute(attr)) {
+        const val = el.getAttribute(attr) ?? "";
+        el.setAttribute(attr, await translateTextFn(val, targetLang));
+      }
+    }
     if (stopTag && el.tagName.toLowerCase() === stopTag.toLowerCase()) {
       // Translate the inner XML as a block
       const inner = el.innerHTML;
@@ -26,7 +34,13 @@ async function translateDomNode(
     }
     // Recurse into children
     for (const child of Array.from(el.childNodes)) {
-      await translateDomNode(child, targetLang, translateTextFn, stopTag);
+      await translateDomNode(
+        child,
+        targetLang,
+        translateTextFn,
+        stopTag,
+        attrsToTranslate,
+      );
     }
   }
 }
@@ -43,7 +57,8 @@ const translateXML = async (
   xml: string,
   targetLang: string,
   translateTextFn: (text: string, targetLang: string) => Promise<string>,
-  stopTag?: string
+  stopTag?: string,
+  attrsToTranslate: string[] = [],
 ): Promise<string> => {
   // Parse as XML
   const dom = new JSDOM(xml, { contentType: "text/xml" });
@@ -53,7 +68,8 @@ const translateXML = async (
     doc.documentElement,
     targetLang,
     translateTextFn,
-    stopTag
+    stopTag,
+    attrsToTranslate,
   );
   // Serialize back to XML
   // Remove XML declaration if present

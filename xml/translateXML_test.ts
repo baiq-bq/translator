@@ -16,6 +16,21 @@ Deno.test("stops recursion at tag", async () => {
   const result = await translateXML(input, "es", stubTranslate, "paragraph");
   assertEquals(
     result,
-    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`
+    `<page><paragraph><line>A example of paragraph</line><line>Another line</line>-es</paragraph></page>`,
+  );
+});
+
+Deno.test("translates selected attributes", async () => {
+  const input = "<img alt='Hello world' title='No change'/><p>Hi</p>";
+  const result = await translateXML(
+    input,
+    "fr",
+    stubTranslate,
+    undefined,
+    ["alt"],
+  );
+  assertEquals(
+    result,
+    '<img alt="Hello world-fr" title="No change"/><p>Hi-fr</p>',
   );
 });

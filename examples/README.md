@@ -36,3 +36,9 @@ You can also translate XML files:
 ```sh
 deno run -A examples/translate_xml.ts
 ```
+
+Translate an HTML snippet with attribute translation:
+
+```sh
+deno run -A examples/translate_html.ts
+```

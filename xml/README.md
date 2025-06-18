@@ -3,7 +3,8 @@
 Helpers for translating XML strings without any third-party DOM library.
 
 Nested tags are handled recursively. When the specified `stopTag` is
-encountered, its contents are sent as a single block for translation.
+encountered, its contents are sent as a single block for translation. You can
+also specify attribute names that should be translated.
 
 ## Example
 
@@ -16,12 +17,13 @@ const chat = configureLangChain({
   apiKey: "YOUR_GOOGLE_KEY",
 });
 
-const xml = `<page><paragraph>Hello <line>World</line></paragraph></page>`;
+const xml = `<figure><img alt="A cat" src="cat.jpg" /></figure>`;
 const translated = await translateXML(
   xml,
   "es",
   (text, lang) => translateText(text, lang, chat),
-  "paragraph",
+  undefined,
+  ["alt"],
 );
 console.log(translated);
 ```

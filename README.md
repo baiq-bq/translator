@@ -47,6 +47,20 @@ const translatedXml = await translateXML(
 console.log(translatedXml);
 ```
 
+### Translate HTML attributes
+
+```ts
+const html = "<img alt='A cat' src='cat.jpg'><p>Hello</p>";
+const translatedHtml = await translateXML(
+  html,
+  "es",
+  (text, lang) => translateText(text, lang, chat),
+  undefined,
+  ["alt"],
+);
+console.log(translatedHtml);
+```
+
 ### CLI usage
 
 Translate a short text directly from the command line:
