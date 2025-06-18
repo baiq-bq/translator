@@ -47,6 +47,21 @@ const translatedXml = await translateXML(
 console.log(translatedXml);
 ```
 
+To translate attributes such as `alt` in HTML, pass the attribute names as the
+last argument:
+
+```ts
+const html = '<img alt="Hello" src="pic.png" />';
+const translatedHtml = await translateXML(
+  html,
+  "fr",
+  (text, lang) => translateText(text, lang, chat),
+  undefined,
+  ["alt"],
+);
+console.log(translatedHtml);
+```
+
 ### CLI usage
 
 Translate a short text directly from the command line:
