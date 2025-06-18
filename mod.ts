@@ -13,15 +13,12 @@
  * @see {@link OpenAIModel} for the supported OpenAI models.
  * @see {@link GoogleModel} for the supported Google Generative AI models.
  */
-import translateJSON from "./json/mod.ts";
-import translateText from "./text/mod.ts";
-import translateXML from "./xml/mod.ts";
-import {
-  configureLangChain,
-  type GoogleModel,
-  type LangChainConfig,
-  type OpenAIModel,
+export { configureLangChain } from "./LangChainConfig.ts";
+export type {
+  GoogleModel,
+  LangChainConfig,
+  OpenAIModel,
 } from "./LangChainConfig.ts";
-
-export { configureLangChain, translateJSON, translateText, translateXML };
-export type { GoogleModel, LangChainConfig, OpenAIModel };
+export { default as translateJSON } from "./json/mod.ts";
+export { default as translateText } from "./text/mod.ts";
+export { default as translateXML } from "./xml/mod.ts";

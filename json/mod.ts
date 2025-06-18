@@ -11,7 +11,5 @@
  * @see {@link OpenAIModel} for the supported OpenAI models.
  * @see {@link GoogleModel} for the supported Google Generative AI models.
  */
-import translateJSON from "./translateJSON.ts";
-
-/** Re-export of {@link translateJSON}. */
-export default translateJSON;
+export { default, default as translateJSON } from "./translateJSON.ts";
+export type { JSONObject } from "./translateJSON.ts";
